@@ -2,24 +2,18 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
-
+const session = require('express-session');
+const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const ejsMate = require('ejs-mate');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
+const userRoutes = require('./routes/users');
+const campgroundsRoutes = require('./routes/campgrounds');
+const reviewsRoutes = require('./routes/reviews');
 
-const campgrounds = require('./routes/campgrounds');
-const reviews = require('./routes/reviews');
-// mongoose.connect('mongodb://localhost:27017/yelp-camp',{
-//     useNewUrlParser:true,
-//     useCreateIndex:true,
-//     useUnifiedTopology:true
-// });
-
-// const db = mongoose.connection;
-// db.on("error",console.error.bind(console,"connection error"));
-// db.once("open", () =>{
-//     console.log("Database Connected!!");
-// });
 
 main().catch(err => console.log(err));
 
@@ -39,10 +33,45 @@ app.use(express.urlencoded({extended : true}));
 app.use(methodOverride('_method'));
 
 app.use(express.static(path.join(__dirname, 'public')))
+const sessionconfig = {
+    secret: 'Mysecret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+app.use(session(sessionconfig));
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
-app.use('/campgrounds', campgrounds);
-app.use('/campgrounds/:id/reviews',reviews);
+app.use((req, res, next) => {
+    console.log(req.session);
+    res.locals.currentUser= req.user
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+})
+
+app.get('/fake', async (req,res)=>{
+    const user = new User({email:'colt@gmail.com',username:'coltt'})
+    const newUser = await User.register(user,'chicken');
+    res.send(newUser);
+})
+
+
+app.use('/',userRoutes);
+app.use('/campgrounds', campgroundsRoutes);
+app.use('/campgrounds/:id/reviews',reviewsRoutes);
 
 
 app.get('/',(req,res) =>{
