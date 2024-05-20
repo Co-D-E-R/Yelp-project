@@ -1,16 +1,6 @@
-# [Camping-Project](https://peaceful-ocean-29295-87383deb0a4f.herokuapp.com/)
+# [Yelp-Project](https://peaceful-ocean-29295-87383deb0a4f.herokuapp.com/)
 
 This project is a Yelp-like web application where users can create, review, and explore campgrounds.
-
-## Creating a New Campground
-
-To create a new campground, navigate to the "New Campground" page. Fill in the form with the campground's title, location, price, description, and images.
-
-### Reviewing a Campground
-
-To leave a review for a campground, navigate to the campground's detail page. Fill in the form with your rating and review.
-
-
 
 ## Features
 
@@ -30,16 +20,38 @@ To leave a review for a campground, navigate to the campground's detail page. Fi
 - EJS
 - Cloudinary for image upload
 
-## Installation
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+- Node.js
+- MongoDB
+- Cloudinary API keys
+- NPM
+
+### Installation
 
 ```sh
+1.Clone the repository
 
-1. Clone the repository
-2. Install dependencies with `npm install`
-3. Start the server with `npm start`
+git clone https://github.com/Co-D-E-R/Yelp-project.git
+
+2.Install NPM packages
+
+npm install
+
+3. Start the development server
+npm run dev
+
+4.Usage
+Open your web browser and visit http://localhost:3000 to start using the application
 ```
 
 ## Usage
+
+Get API keys from [Cloudinary](https://cloudinary.com/) and add them to a `.env` file in the root directory.
 
 Navigate to `http://localhost:3000/` to use the application.
 
