@@ -10,11 +10,14 @@ const upload = multer({ storage })
 const Campground = require('../models/campground');
 const { isLoggedIn,validateCampground,isAuthor } = require('../middleware'); 
 
+
 router.route('/')
     .get(catchAsync(campgrounds.index))
     .post(isLoggedIn, upload.array('image'),validateCampground,catchAsync(campgrounds.createCampground))
 
+//Render New From
  router.get('/new',isLoggedIn, campgrounds.renderNewForm)
+ 
  
  router.route('/:id')
     .get(catchAsync(campgrounds.showCampgrounds))
